@@ -7,7 +7,7 @@ import openpyxl as opx
 from openpyxl.styles import PatternFill, Side, Border
 
 __author__ = "Matthew Kriz"
-__copyright__ = "Copyright 2020, DDucks nTrophy project"
+__copyright__ = "Copyright 2021, DDucks nTrophy project"
 __credits__ = ["Matthew Kriz"]
 __license__ = "GNU General Public License v3.0"
 __version__ = "1.0.1"
