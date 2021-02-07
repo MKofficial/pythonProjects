@@ -62,6 +62,3 @@ class BST:
             if self.actual is None:
                 return actual.key
             return actual.key
-
-
-

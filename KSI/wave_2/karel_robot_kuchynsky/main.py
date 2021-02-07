@@ -1,5 +1,4 @@
 from typing import List, Any
-from inspect import signature
 
 
 def add(bowl_a: List[str], bowl_b: List[str]) -> List[str]:
@@ -36,6 +35,11 @@ def cut(bowl: List[str]) -> List[str]:
 
 
 def bake(bowl_a: List[str], bowl_b: List[str], bowl_c: List[str]) -> List[str]:
+    # todo: can be improved
+    if len(bowl_b) > len(bowl_a):
+        bowl_a = bowl_a * len(bowl_b)
+
+    bowl_a = bowl_a[:len(bowl_b)]
     return bowl_a + bowl_b + bowl_c
 
 
@@ -48,39 +52,33 @@ def remove(bowl_a: List[str], bowl_b: List[str]) -> List[str]:
 
 
 def cook(recipe: List[Any]) -> List[str]:
-    functions = []  # stores functions
-    ingredients = []
-    index = None  # stores index of last callable element in recipe
-    for i in recipe:
-        if isinstance(index, int):
-            if callable(i):
-                ingredients.append(recipe[index + 1: recipe.index(i)])
-                index = recipe.index(i)
-            elif recipe.index(i) == len(recipe) - 1:
-                ingredients.append(recipe[index + 1: recipe.index(i) + 1])
-        if callable(i):
-            functions.append(i)
-            index = recipe.index(i)
+    while callable(recipe[0]):
+        for element in recipe:
+            if callable(element):
+                index = recipe.index(element)  # index of the first function
+                index2 = len(recipe)
 
-    fun_and_ing = list(zip(functions, ingredients))
-    # change all tuples to lists
-    for i in fun_and_ing:
-        fun_and_ing[fun_and_ing.index(i)] = list(i)
+                for next_function in recipe[index + 1:]:
+                    if callable(next_function):
+                        index2 = recipe.index(next_function)  # index of next function
+                        break
 
-    while callable(fun_and_ing[0][0]):
-        for i in fun_and_ing:
-            if not callable(i[0]):
-                fun_and_ing[fun_and_ing.index(i) - 1].append(i)
-                del fun_and_ing[fun_and_ing.index(i)]
-            try:
-                fun_and_ing[fun_and_ing.index(i)] = i[0](*i[1:])
-            except TypeError:
-                continue
+                param = recipe[index + 1: index2]  # parameters between the first and the second function
 
-    pass
+                try:
+                    result = element(*param)
+                    del recipe[index:index2]
 
+                    # todo: figure out some better outcome than this, problem with deleting items and uploading new one
+                    recipe[index] = result
+
+                except TypeError:
+                    continue
+
+
+    return recipe
 
 if __name__ == '__main__':
-    print(cook([bake, ["sour cream"], cut, ["plum", "plum", "plum"], remove, ["vanilla"],
-                mix, ["flour", "baking powder"], ["sugar", "eggs", "vanilla"]]))
-    # print(len(signature(bake).parameters))
+    pass
+    print(cook([bake, ["sour cream"], cut, ["plum", "plum", "plum"], remove, ["vanilla"], mix, ["flour", "baking powder"],
+          ["sugar", "eggs", "vanilla"]]))

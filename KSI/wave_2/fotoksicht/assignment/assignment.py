@@ -1,8 +1,6 @@
 from functools import reduce
 from typing import Callable, Any, List
 
-import fotoksicht as fk
-
 """
 fotoksicht poskytuje nasledujici funkce:
 1. load(path)
@@ -28,7 +26,7 @@ funkci `map`, `filter`, `reduce` a `zip` a list comprehensions.
 # Aplikuje funkci 'func' na kazdy pixel (polozku v dvourozmernem seznamu) obrazku 'image' a vysledek operace vrati.
 # Priklad: img = immap(lambda x: x + 1, [[1, 2], [3, 4]]) # img = [[2, 3], [4, 5]]
 def immap(func: Callable[[Any], Any], image: List[List[int]]) -> List[List[int]]:
-    return list(map(func, [element for inner_list in image for element in inner_list]))
+    return [[func(element) for element in inner] for inner in image]
 
 
 # Aplikuje filter na radky obrazku 'image' a vysledek vrati.
@@ -60,12 +58,9 @@ def imreduceWidth(func: Callable[[Any, Any], Any], image: List[List[int]]) -> Li
 
 # Redukuje kazdy sloupec obrazku 'image' na jeden radek pomoci funkce 'reduce' a vrati vysledek.
 # Priklad: img = imreduceHeight(lambda x,y: x+y, [[1, 2], [3, 4]]) # img = [4, 6]
-def imreduceHeight(func: Callable[[Any, Any], Any], image: List[List[int]]) -> List[List[int]]:
-    return imreduceWidth(func, imtranspose(image))
-
-    # todo: if result should be List[int] then check out error in imreduce
-    # return [inner_element for outer_element in imreduceWidth(func, imtranspose(image))
-    #             for inner_element in outer_element]
+def imreduceHeight(func: Callable[[Any, Any], Any], image: List[List[int]]) -> List[int]:
+    return [inner_element for outer_element in imreduceWidth(func, imtranspose(image)) for inner_element in
+            outer_element]
 
 
 # Redukuje kazdy sloupec obrazku 'image' a nasledne kazdy radek pomoci funkce 'reduce' a vrati vysledek.
@@ -79,7 +74,7 @@ def imreduce(func: Callable[[Any, Any], Any], image: List[List[int]]) -> List[in
 # Spojeni je definovane tak, ze novemu obrazku na pozici x, y priradi hodnotu func(image1[x][y], image2[x][y])
 # Priklad: img = imzipWith(lambda xy: xy[0] + xy[1], [[1, 2], [3, 4]], [[1, 1], [2, 2]]) # img = [[2, 3], [5, 6]]
 def imzipWith(func: Callable[[Any], Any], image1: List[List[int]], image2: List[List[int]]) -> List[List[int]]:
-    # a = list(zip([j for i in image1 for j in i], [j for i in image2 for j in i]))
+    a = list(zip([j for i in image1 for j in i], [j for i in image2 for j in i]))
     pass
 
 
@@ -91,16 +86,10 @@ def addLogo(image, logo, opacity):
     pass
 
 
-# Nasledujici funkce je urcena pro vasi kreativitu. (Muzete ziskat bonusovy bod za peknou funkci.)
-def bonus(image):
-    pass
-
-
 if __name__ == "__main__":
-    img = fk.load('images/turing.png')
-    logo = fk.load('images/logofi.png')
-    img = addLogo(img, logo, 0.1)
-    fk.save(img, 'images/turing-logo.png')
-    # img = immap(lambda x: x + 1, img)
-    # a = imzipWith(lambda xy: xy[0] + xy[1], [[1, 2], [3, 4]], [[1, 1], [2, 2]])
+    # img = fk.load('images/turing.png')
+    # logo = fk.load('images/logofi.png')
+    # img = addLogo(img, logo, 0.1)
+    # fk.save(img, 'images/turing-logo.png')
+    print(imreduceHeight(lambda x, y: x + y, [[1, 2], [3, 4]]))
     pass
