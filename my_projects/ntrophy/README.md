@@ -26,54 +26,54 @@ Tato třída vytváří instance tabulky, které později slouží jako výsledn
 
 >`workbook_name` slouží k uchování jména dané tabulky.
 
-#### `def __init__`
+#### `def __init__(self, workbook_name: str)`
 > Tato metoda se volá při vytváření nové instance.
 
-Jediním parametrem metody je `woorkbook_name: str`, který slouží jako jméno pro novou tabulku.
+Jediním parametrem metody je `woorkbook_name`, který slouží jako jméno pro novou tabulku.
 
-#### `def convertCsvToExcel`
+#### `def convertCsvToExcel(csv_file: str)`
 > Metoda je `@staticmethod`, míní, že metodu lze volat jak přes instanci třídy, tak i přes samotnou třídu.
 
 Tato metoda má za úkol konvertovat .csv soubory do .xlsx soubory. My jsme ji nakonec nevyužili, 
 protože nebyla potřeba.
 
-#### `def colorTable`
+#### `def colorTable(workbook_name: str, color: str = 'FF0000')`
 > Metoda je `@staticmethod`, míní, že metodu lze volat jak přes instanci třídy, tak i přes samotnou třídu.
 
 Tato metoda zvýrazňuje všechny buňky, které mají hodnotu 1.
-Prvním parametrem metody je `workbook_name: str`, který slouží jako jméno tabulky. Druhým je `color: str`, který definuje barvu, 
+Prvním parametrem metody je `workbook_name`, který slouží jako jméno tabulky. Druhým je `color`, který definuje barvu, 
 jakou se budou buňky vybarvovat.
 
-#### `def adjustCells`
+#### `def adjustCells(workbook_name: str, height: int = 50, width: int = 50)`
 > Metoda je `@staticmethod`, míní, že metodu lze volat jak přes instanci třídy, tak i přes samotnou třídu.
 
 Tato metoda přizpůsobuje výšku a šířku jednotlivých buněk. 
 Původní nastavení excelu, kdy výška jedné buňky je *29 pixelů* a šířka *96 pixelů* není vhodná k použití, protože 
-zkresluje měřítko. Doporučujeme nastavit parametry `height: int` a `width: int` na stejnou hodnotu.
-Dalším parametrem metody je `workbook_name: str`, který slouží jako jméno tabulky.
+zkresluje měřítko. Doporučujeme nastavit parametry `height` a `width` na stejnou hodnotu.
+Dalším parametrem metody je `workbook_name`, který slouží jako jméno tabulky.
 
-#### `def fillZeros`
+#### `def fillZeros(self)`
 Tato metoda se využije při "resetu" tabulky. Vyplní všechny buňky hodnotou 0.
 
-#### `def resetColorAndBorders`
+#### `def resetColorAndBorders(self)`
 Tato metoda se také využije převážně při "resetu" tabulky. Změní všechny barvy a všechno ohraničení na původní hodnotu.
 
-#### `def resetColor`
+#### `def resetColor(self)`
 Tato metoda je zjednodušenou metodou `resetColorAndBorders`. Resetuje pouze barvu. Přidali jsme ji tuto "odnož", 
 protože časová komplexicita všech funkcích je velká - O(n^2).
 
-#### `def resetBorders`
+#### `def resetBorders(self)`
 Tato metoda je zjednodušenou metodou `resetColorAndBorders`. Resetuje pouze ohraničení. Přidali jsme ji tuto "odnož", 
 protože časová komplexicita všech funkcích je velká - O(n^2).
 
-#### `def copyValues`
+#### `def copyValues(workbook_from: str, workbook_to: str, color: str)`
 > Metoda je `@staticmethod`, míní, že metodu lze volat jak přes instanci třídy, tak i přes samotnou třídu.
 
 Asi nejdůležitější metoda celého programu. Kopíruje hodnoty z jedné excelové tabulky do druhé. Narazíli při průchodu 
-tabulky `workbook_from: str`, ze které data kopírujeme, na hodnotu buňky 1, překopíruje danou buňku **s danou barvou** 
-a s danou hodnotou do tabulky `workbook_to: str`.
+tabulky `workbook_from`, ze které data kopírujeme, na hodnotu buňky 1, překopíruje danou buňku **s danou barvou** 
+a s danou hodnotou do tabulky `workbook_to`.
 
-#### `def deleteValues`
+#### `def deleteValues(self)`
 > Tuto metodu je důležité používat **velice obezřetně!!!**
 
 Vymaže všechny hodnoty v buňkách. Použití je pro vytvoření definitivní mapy, která už se dál upravovat nebude. Tím, že 
