@@ -161,9 +161,10 @@ class Table:
             for column in range(1, sheet_from.max_column + 1):
 
                 if sheet_from.cell(row, column).value == 1:
-                    cell = sheet_to.cell(row, column, 1)
-                    cell_color = cell.fill.start_color.index
-                    cell.fill = PatternFill(start_color=cell_color, end_color=cell_color, fill_type='solid')
+                    cell_to = sheet_to.cell(row, column, 1)
+                    cell_color = sheet_from(row, column).fill.start_color.index
+
+                    cell_to.fill = PatternFill(start_color=cell_color, end_color=cell_color, fill_type='solid')
 
         wb_to.save(workbook_to)
 
